@@ -1,0 +1,10 @@
+{
+  "employees": 10000,
+  "incidents_per_employee_per_year": 2,
+  "manual_minutes_per_incident": 20,
+  "ai_minutes_per_incident": 8,
+  "loaded_it_cost_per_hour": 50,
+  "annual_platform_cost": 60000,
+  "annual_implementation_cost": 40000,
+  "annual_operations_cost": 20000
+}
