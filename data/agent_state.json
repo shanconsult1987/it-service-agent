@@ -1,0 +1,11 @@
+{
+  "incident_id": null,
+  "status": "New",
+  "category": null,
+  "priority": null,
+  "assigned_agent": null,
+  "confidence": null,
+  "resolution": null,
+  "escalation_required": false,
+  "last_action": null
+}
