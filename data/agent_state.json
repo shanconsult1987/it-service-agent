@@ -1,11 +1,11 @@
 {
   "incident_id": null,
-  "status": "New",
+  "status": "Resolved",
   "category": null,
   "priority": null,
   "assigned_agent": null,
   "confidence": null,
-  "resolution": null,
+  "resolution": "Category: Network\nPriority: High\nRecommended resolution:\n1. Confirm network connectivity.\n2. Restart the VPN client.\n3. Re-authenticate using corporate identity.\n4. Confirm the VPN client is current.\n5. If the problem persists, escalate to Network Operations.\nReason: The incident matches the approved VPN Connection Problems symptom \u201cVPN cannot connect,\u201d and the listed steps are the authorized troubleshooting workflow.\nConfidence: High",
   "escalation_required": false,
-  "last_action": null
+  "last_action": "Generate resolution"
 }
