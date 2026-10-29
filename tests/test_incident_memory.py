@@ -72,7 +72,8 @@ def test_cosmos_error_during_action_returns_to_menu(monkeypatch, capsys):
 
     captured = capsys.readouterr()
     assert captured.out.count("=== Incident Memory Demo ===") == 2
-    assert "Cosmos DB request failed: (Forbidden)" in captured.err
+    assert "Cosmos DB request failed:" in captured.err
+    assert "(Forbidden) Request blocked by Auth" in captured.err
     assert "Traceback" not in captured.err
 
 
