@@ -27,8 +27,9 @@ with patch("http.server.HTTPServer") as server:
         namespace = runpy.run_module("app.server", run_name="__main__")
     server.assert_called_once_with(("127.0.0.1", 8000), namespace["Handler"])
     server.return_value.serve_forever.assert_called_once_with()
-    assert namespace["calculate_roi"]()["annual_incidents"] == 20000
-    assert namespace["responsible_ai_summary"]()["total"] == 8
+    assert callable(namespace["investigate"])
+    assert callable(namespace["generate_resolution"])
+    assert isinstance(namespace["orchestrator"], namespace["ITServiceOrchestrator"])
 """
     result = subprocess.run(
         [sys.executable, "-c", script, str(ROOT), launch_mode],
