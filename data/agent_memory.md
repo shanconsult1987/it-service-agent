@@ -11,10 +11,14 @@ No incidents processed yet.
 No decisions recorded yet.
 
 ## Escalations
+- Policy requires human involvement.
+
 
 No escalations recorded yet.
 
 ## Successful Resolutions
+- INC1002: Use the approved enterprise troubleshooting procedure.
+
 - VPN does not connect: Category: Network
 Priority: High
 Recommended resolution:

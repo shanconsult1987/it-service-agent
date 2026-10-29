@@ -13,16 +13,23 @@ if __package__ in (None, ""):
     sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 from app.agent import (
-    investigate
+    investigate,
+    generate_resolution
 )
 
-from app.dashboard import (
-    calculate_roi,
-    responsible_ai_summary
+from app.orchestrator import (
+    ITServiceOrchestrator
 )
 
 
-class Handler(BaseHTTPRequestHandler):
+orchestrator = (
+    ITServiceOrchestrator()
+)
+
+
+class Handler(
+    BaseHTTPRequestHandler
+):
 
     def send_json(
         self,
@@ -51,34 +58,105 @@ class Handler(BaseHTTPRequestHandler):
 
         self.wfile.write(body)
 
+    def read_json(self):
+
+        length = int(
+            self.headers.get(
+                "Content-Length",
+                "0"
+            )
+        )
+
+        raw = self.rfile.read(
+            length
+        )
+
+        return json.loads(
+            raw.decode("utf-8")
+        )
+
     def do_GET(self):
 
         if self.path == "/":
 
             self.send_json({
                 "service":
-                    "IT Service Agent",
+                    "Contoso IT Service Agent",
                 "status":
                     "running"
             })
 
             return
 
-        if self.path == "/dashboard/roi":
+        self.send_json(
+            {"error": "Not found"},
+            404
+        )
 
-            self.send_json(
-                calculate_roi()
+    def do_POST(self):
+
+        if self.path == "/investigate":
+
+            payload = self.read_json()
+
+            result = investigate(
+                payload.get(
+                    "description",
+                    ""
+                )
             )
+
+            self.send_json(result)
 
             return
 
-        if self.path == (
-            "/dashboard/responsible-ai"
-        ):
+        if self.path == "/resolve":
 
-            self.send_json(
-                responsible_ai_summary()
+            payload = self.read_json()
+
+            result = generate_resolution(
+                payload.get(
+                    "description",
+                    ""
+                )
             )
+
+            self.send_json(result)
+
+            return
+
+        if self.path == "/orchestrate":
+
+            payload = self.read_json()
+
+            incident_id = payload.get(
+                "incident_id",
+                "INC-DEMO"
+            )
+
+            description = payload.get(
+                "description",
+                ""
+            )
+
+            if not description:
+
+                self.send_json(
+                    {
+                        "error":
+                            "description required"
+                    },
+                    400
+                )
+
+                return
+
+            result = orchestrator.process(
+                incident_id,
+                description
+            )
+
+            self.send_json(result)
 
             return
 
@@ -96,8 +174,9 @@ if __name__ == "__main__":
     )
 
     print(
-        "IT Service Agent running "
-        "on http://127.0.0.1:8000"
+        "Contoso IT Service Agent "
+        "running on "
+        "http://127.0.0.1:8000"
     )
 
     server.serve_forever()
