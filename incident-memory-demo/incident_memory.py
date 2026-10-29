@@ -1,8 +1,10 @@
 
 import os
 import json
+import sys
 from datetime import datetime, timezone
 
+from azure.core.exceptions import AzureError
 from azure.cosmos import CosmosClient
 from azure.identity import DefaultAzureCredential
 
@@ -12,16 +14,28 @@ CONTAINER_NAME = "IncidentMemory"
 
 ENDPOINT = os.environ.get("COSMOS_ENDPOINT")
 
-if not ENDPOINT:
-    raise RuntimeError(
-        "Set COSMOS_ENDPOINT before running the application."
-    )
+container = None
 
-credential = DefaultAzureCredential()
-client = CosmosClient(ENDPOINT, credential=credential)
 
-database = client.get_database_client(DATABASE_NAME)
-container = database.get_container_client(CONTAINER_NAME)
+def connect():
+    """Create the container client.
+
+    CosmosClient authenticates when created, so auth errors are raised here.
+    """
+    global container
+
+    if not ENDPOINT:
+        raise RuntimeError(
+            "Set COSMOS_ENDPOINT before running the application."
+        )
+
+    print("Connecting to Azure Cosmos DB...")
+
+    credential = DefaultAzureCredential()
+    client = CosmosClient(ENDPOINT, credential=credential)
+
+    database = client.get_database_client(DATABASE_NAME)
+    container = database.get_container_client(CONTAINER_NAME)
 
 
 def utc_now():
@@ -129,6 +143,15 @@ def show_incident(incident_id):
 
 
 def main():
+    try:
+        connect()
+    except (RuntimeError, AzureError) as error:
+        print(
+            f"Could not connect to Azure Cosmos DB: {error}",
+            file=sys.stderr
+        )
+        return 1
+
     while True:
         print("\n=== Incident Memory Demo ===")
         print("1. Create/reset sample incident")
@@ -138,27 +161,31 @@ def main():
 
         choice = input("Select an option: ").strip()
 
-        if choice == "1":
-            create_incident()
+        try:
+            if choice == "1":
+                create_incident()
 
-        elif choice == "2":
-            show_incident("INC-1001")
+            elif choice == "2":
+                show_incident("INC-1001")
 
-        elif choice == "3":
-            event = input("What happened? ").strip()
-            action = input("Action or next step: ").strip()
+            elif choice == "3":
+                event = input("What happened? ").strip()
+                action = input("Action or next step: ").strip()
 
-            if event and action:
-                add_memory("INC-1001", event, action)
+                if event and action:
+                    add_memory("INC-1001", event, action)
+                else:
+                    print("Event and action are required.")
+
+            elif choice == "4":
+                break
+
             else:
-                print("Event and action are required.")
+                print("Invalid option.")
 
-        elif choice == "4":
-            break
-
-        else:
-            print("Invalid option.")
+        except AzureError as error:
+            print(f"Cosmos DB request failed: {error}", file=sys.stderr)
 
 
 if __name__ == "__main__":
-    main()
+    sys.exit(main())
