@@ -1,0 +1,3 @@
+{"timestamp_utc":"2026-10-30T05:06:33.110935+00:00","event_type":"workshop_test","outcome":"success","correlation_id":"LOCAL-TEST-001","incident_id":"INC-TEST-001","reason_code":"MANUAL_TEST"}
+{"timestamp_utc":"2026-10-30T05:12:42.284672+00:00","event_type":"guardrail_rejection","outcome":"rejected","correlation_id":"TEST-GUARD-001","incident_id":"INC-GUARD-01","reason_code":"EMPTY_DESCRIPTION"}
+{"timestamp_utc":"2026-10-30T05:12:58.571496+00:00","event_type":"guardrail_rejection","outcome":"rejected","correlation_id":"TEST-GUARD-001","incident_id":"INC-GUARD-01","reason_code":"EMPTY_DESCRIPTION"}
