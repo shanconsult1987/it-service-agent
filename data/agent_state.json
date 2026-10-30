@@ -1,9 +1,9 @@
 {
-  "incident_id": "INC1003",
+  "incident_id": "INC-OPS-001",
   "status": "Escalated",
-  "category": "Unknown",
-  "priority": "Low",
-  "assigned_agent": "HumanEscalationAgent",
+  "category": "Network",
+  "priority": "High",
+  "assigned_agent": "NetworkAgent",
   "confidence": 0.9,
   "resolution": "Use the approved enterprise troubleshooting procedure.",
   "escalation_required": true,

@@ -1,3 +1,6 @@
 {"timestamp_utc":"2026-10-30T05:06:33.110935+00:00","event_type":"workshop_test","outcome":"success","correlation_id":"LOCAL-TEST-001","incident_id":"INC-TEST-001","reason_code":"MANUAL_TEST"}
 {"timestamp_utc":"2026-10-30T05:12:42.284672+00:00","event_type":"guardrail_rejection","outcome":"rejected","correlation_id":"TEST-GUARD-001","incident_id":"INC-GUARD-01","reason_code":"EMPTY_DESCRIPTION"}
 {"timestamp_utc":"2026-10-30T05:12:58.571496+00:00","event_type":"guardrail_rejection","outcome":"rejected","correlation_id":"TEST-GUARD-001","incident_id":"INC-GUARD-01","reason_code":"EMPTY_DESCRIPTION"}
+{"timestamp_utc":"2026-10-30T07:00:09.269724+00:00","event_type":"incident_processing","outcome":"started","correlation_id":"OPS-DEMO-001","incident_id":"INC-OPS-001","reason_code":null}
+{"timestamp_utc":"2026-10-30T07:00:09.340660+00:00","event_type":"incident_escalation","outcome":"human_required","correlation_id":"OPS-DEMO-001","incident_id":"INC-OPS-001","reason_code":"HUMAN_APPROVAL"}
+{"timestamp_utc":"2026-10-30T07:00:26.577284+00:00","event_type":"guardrail_rejection","outcome":"rejected","correlation_id":"OPS-REJECT-001","incident_id":null,"reason_code":"EMPTY_DESCRIPTION"}

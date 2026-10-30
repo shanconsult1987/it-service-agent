@@ -1,0 +1,31 @@
+
+[
+  {
+    "id": "EVAL-01",
+    "description": "VPN keeps disconnecting",
+    "expected_category": "Network",
+    "expected_priority": "High",
+    "expected_policy": "HUMAN_APPROVAL"
+  },
+  {
+    "id": "EVAL-02",
+    "description": "I cannot reset my password",
+    "expected_category": "Identity",
+    "expected_priority": "Medium",
+    "expected_policy": "RESOLVE"
+  },
+  {
+    "id": "EVAL-03",
+    "description": "Laptop is slow",
+    "expected_category": "Endpoint",
+    "expected_priority": "Medium",
+    "expected_policy": "RESOLVE"
+  },
+  {
+    "id": "EVAL-04",
+    "description": "Printer is on fire",
+    "expected_category": "Unknown",
+    "expected_priority": "Low",
+    "expected_policy": "ESCALATE"
+  }
+]

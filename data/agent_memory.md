@@ -13,6 +13,8 @@ No decisions recorded yet.
 ## Escalations
 - Policy requires human involvement.
 
+- Policy requires human involvement.
+
 
 No escalations recorded yet.
 
