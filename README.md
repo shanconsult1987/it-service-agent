@@ -23,8 +23,13 @@ Press Ctrl+C to stop it.
 
 `app/dashboard.py` reads ROI inputs from `data/roi.json` and responsible AI
 controls from `data/responsible_ai.json`. Both files must contain valid JSON
-and be saved as UTF-8 (with or without a byte order mark). The server does not
-expose these as HTTP routes; the module is currently covered by its tests.
+and be saved as UTF-8 (with or without a byte order mark).
+
+ROI output includes the configured `assumptions` and a `basis` caveat alongside
+the calculated values. The responsible AI summary includes `score_percent`:
+the percentage of controls declared `Pass`, rounded to two decimal places, or
+`null` when there are no controls. This is a self-declared register score, not
+independent compliance certification.
 
 If loading fails, the error identifies the file. Empty files must be restored
 with their intended data; invalid JSON errors include the line and column to

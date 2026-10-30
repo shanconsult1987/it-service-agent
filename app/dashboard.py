@@ -80,6 +80,7 @@ def calculate_roi():
 
 
 def responsible_ai_summary():
+    """Summarize declared control statuses, not certified compliance."""
     data = load_json(RAI_FILE)
     controls = data.get("controls", [])
 
@@ -104,6 +105,10 @@ def responsible_ai_summary():
         "register_type": data.get("register_type", "unspecified"),
         "total": len(controls),
         "passed": passed,
+        "score_percent": (
+            round(passed / len(controls) * 100, 2)
+            if controls else None
+        ),
         "in_review": in_review,
         "failed": failed,
         "needs_evidence": needs_evidence,

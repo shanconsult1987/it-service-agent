@@ -20,13 +20,14 @@ root = Path(sys.argv[1])
 mode = sys.argv[2]
 sys.path[0] = str(root / "app" if mode == "script" else root)
 
-with patch("http.server.HTTPServer") as server:
+with patch("http.server.ThreadingHTTPServer") as server:
     if mode == "script":
         namespace = runpy.run_path(str(root / "app" / "server.py"), run_name="__main__")
     else:
         namespace = runpy.run_module("app.server", run_name="__main__")
     server.assert_called_once_with(("127.0.0.1", 8000), namespace["Handler"])
     server.return_value.serve_forever.assert_called_once_with()
+    server.return_value.server_close.assert_called_once_with()
     assert callable(namespace["investigate"])
     assert callable(namespace["generate_resolution"])
     assert isinstance(namespace["orchestrator"], namespace["ITServiceOrchestrator"])
