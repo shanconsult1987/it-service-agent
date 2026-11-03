@@ -1,0 +1,52 @@
+{
+  "controls": [
+    {
+      "id": "RAI-001",
+      "name": "Ground responses in approved knowledge",
+      "status": "Pass",
+      "owner": "AI Architecture"
+    },
+    {
+      "id": "RAI-002",
+      "name": "Prevent unauthorized actions",
+      "status": "Pass",
+      "owner": "Security"
+    },
+    {
+      "id": "RAI-003",
+      "name": "Human escalation for high-risk cases",
+      "status": "Pass",
+      "owner": "IT Operations"
+    },
+    {
+      "id": "RAI-004",
+      "name": "Protect secrets and credentials",
+      "status": "Pass",
+      "owner": "Security"
+    },
+    {
+      "id": "RAI-005",
+      "name": "Evaluate agent responses",
+      "status": "Pass",
+      "owner": "AI Architecture"
+    },
+    {
+      "id": "RAI-006",
+      "name": "Monitor production behavior",
+      "status": "Pass",
+      "owner": "Operations"
+    },
+    {
+      "id": "RAI-007",
+      "name": "Maintain audit trail",
+      "status": "Pass",
+      "owner": "Compliance"
+    },
+    {
+      "id": "RAI-008",
+      "name": "Protect against prompt manipulation",
+      "status": "Pass",
+      "owner": "Security"
+    }
+  ]
+}
