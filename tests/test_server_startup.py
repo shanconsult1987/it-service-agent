@@ -44,3 +44,9 @@ class ServerStartupTests(unittest.TestCase):
 
     def test_module_from_project_root(self):
         self.check_startup("module", "app.server", ROOT)
+
+    def test_direct_file_from_project_root(self):
+        self.check_startup("script", str(ROOT / "app" / "server.py"), ROOT)
+
+    def test_direct_file_from_app_directory(self):
+        self.check_startup("script", str(ROOT / "app" / "server.py"), ROOT / "app")

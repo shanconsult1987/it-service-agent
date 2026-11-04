@@ -1,0 +1,17 @@
+{
+  "incident_id": "INC1003",
+  "status": "Escalated",
+  "category": "Unknown",
+  "priority": "Low",
+  "assigned_agent": "HumanEscalationAgent",
+  "confidence": 0.9,
+  "resolution": "Use the approved enterprise troubleshooting procedure.",
+  "escalation_required": true,
+  "last_action": "Human escalation",
+  "token_usage": {
+    "prompt_tokens": 333,
+    "completion_tokens": 326,
+    "total_tokens": 659,
+    "latency_ms": 6632.23
+  }
+}

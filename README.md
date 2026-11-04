@@ -14,6 +14,9 @@ Direct-file startup is also supported:
 python .\app\server.py
 ```
 
+You can also run the server by its absolute file path from another directory.
+Direct-file startup resolves the application's package imports automatically.
+
 The server listens at http://127.0.0.1:8000.
 
 ## Tests
