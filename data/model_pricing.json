@@ -1,0 +1,7 @@
+{
+  "currency": "USD",
+  "model": "gpt-5",
+  "input_cost_per_1m_tokens": null,
+  "output_cost_per_1m_tokens": null,
+  "note": "Populate with verified current provider rates before using cost estimates."
+}

@@ -1,136 +1,71 @@
 import json
-from pathlib import Path
 
+from app.monitoring import snapshot
 
-ROOT = Path(__file__).resolve().parent.parent
-
-ROI_FILE = ROOT / "data" / "roi.json"
-RAI_FILE = (
-    ROOT
-    / "data"
-    / "responsible_ai.json"
+from app.governance import (
+    governance_summary,
+    responsible_ai_summary
 )
 
+from app.evaluation import RESULTS_FILE
 
-def load_json(path):
+from app.costing import calculate_llm_cost
 
-    with open(
-        path,
-        "r",
-        encoding="utf-8"
-    ) as file:
+from app.roi import calculate_roi
 
-        return json.load(file)
+from app.audit import read_events
 
 
-def calculate_roi():
+def dashboard_snapshot():
 
-    data = load_json(
-        ROI_FILE
-    )
+    try:
 
-    annual_incidents = (
-        data["employees"]
-        * data[
-            "incidents_per_employee_per_year"
-        ]
-    )
-
-    minutes_saved = (
-        data["manual_minutes_per_incident"]
-        - data["ai_minutes_per_incident"]
-    )
-
-    hours_saved = (
-        annual_incidents
-        * minutes_saved
-        / 60
-    )
-
-    annual_benefit = (
-        hours_saved
-        * data[
-            "loaded_it_cost_per_hour"
-        ]
-    )
-
-    annual_cost = (
-        data["annual_platform_cost"]
-        + data["annual_implementation_cost"]
-        + data["annual_operations_cost"]
-    )
-
-    net_benefit = (
-        annual_benefit
-        - annual_cost
-    )
-
-    roi_percent = (
-        net_benefit
-        / annual_cost
-        * 100
-        if annual_cost
-        else 0
-    )
-
-    return {
-        "annual_incidents":
-            annual_incidents,
-
-        "hours_saved":
-            round(hours_saved, 2),
-
-        "annual_benefit":
-            round(
-                annual_benefit,
-                2
-            ),
-
-        "annual_cost":
-            round(
-                annual_cost,
-                2
-            ),
-
-        "net_benefit":
-            round(
-                net_benefit,
-                2
-            ),
-
-        "roi_percent":
-            round(
-                roi_percent,
-                2
+        evaluation = json.loads(
+            RESULTS_FILE.read_text(
+                encoding="utf-8"
             )
-    }
+        )
 
-def responsible_ai_summary():
+    except (
+        FileNotFoundError,
+        json.JSONDecodeError
+    ):
 
-    data = load_json(
-        RAI_FILE
-    )
+        evaluation = {
 
-    controls = data["controls"]
+            "case_count": 0,
 
-    passed = sum(
-        1
-        for control in controls
-        if control["status"] == "Pass"
-    )
+            "passed": 0,
 
-    total = len(controls)
+            "failed": 0,
 
-    score = (
-        passed / total * 100
-        if total
-        else 0
-    )
+            "pass_rate_percent": 0,
+
+            "results": []
+
+        }
 
     return {
-        "passed": passed,
-        "total": total,
-        "score_percent":
-            round(score, 2),
-        "controls": controls
+
+        "runtime":
+            snapshot(),
+
+        "governance":
+            governance_summary(),
+
+        "responsible_ai":
+            responsible_ai_summary(),
+
+        "evaluation":
+            evaluation,
+
+        "cost":
+            calculate_llm_cost(),
+
+        "roi":
+            calculate_roi(),
+
+        "audit":
+            read_events(30)
+
     }

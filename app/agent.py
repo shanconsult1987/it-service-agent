@@ -1,12 +1,16 @@
-
 import os
+
 import time
+
 from pathlib import Path
 
-from openai import OpenAI
-
 from app.state import update_state
+
 from app.memory import append_memory
+
+from app.monitoring import record_llm_call
+
+from app.audit import record_event
 
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -97,8 +101,9 @@ def investigate(description):
     return {
         "description": description,
         **result,
-        "knowledge_available":
-            bool(load_knowledge())
+        "knowledge_available": bool(
+            load_knowledge()
+        )
     }
 
 
@@ -118,19 +123,35 @@ def generate_resolution(description):
 
         result["answer"] = (
             "LLM is not configured. "
-            "Use approved enterprise "
-            "knowledge and escalate "
-            "when uncertain."
+            "Use approved enterprise knowledge "
+            "and escalate when uncertain."
         )
 
         result["token_usage"] = {
+
             "prompt_tokens": 0,
+
             "completion_tokens": 0,
+
             "total_tokens": 0,
+
             "latency_ms": 0
+
         }
 
+        record_event(
+            "llm_skipped",
+            outcome="deterministic_no_api_key"
+        )
+
         return result
+
+    model = os.getenv(
+        "OPENAI_MODEL",
+        "gpt-5"
+    )
+
+    from openai import OpenAI
 
     client = OpenAI(
         api_key=api_key
@@ -150,51 +171,116 @@ INCIDENT:
 {description}
 
 Return:
-
-Category:
-Priority:
-Recommended resolution:
-Reason:
-Confidence:
+Category
+Priority
+Recommended resolution
+Reason
+Confidence
 
 Rules:
-
-1. Do not invent procedures.
-2. Do not expose confidential information.
-3. Do not bypass security controls.
-4. If knowledge is insufficient,
-   recommend escalation.
-5. Do not perform privileged actions.
+Do not invent procedures.
+Do not expose confidential information.
+Do not bypass security controls.
+If knowledge is insufficient, recommend escalation.
+Do not perform privileged actions.
 """
 
-    # Measure API response latency
-    start_time = time.perf_counter()
+    start = time.perf_counter()
 
-    response = client.responses.create(
-        model=os.getenv(
-            "OPENAI_MODEL",
-            "gpt-5"
-        ),
-        input=prompt
-    )
+    try:
 
-    latency_ms = round(
-        (time.perf_counter() - start_time) * 1000,
-        2
-    )
+        response = client.responses.create(
+            model=model,
+            input=prompt
+        )
 
-    answer = response.output_text
+        latency_ms = round(
+            (
+                time.perf_counter() - start
+            ) * 1000,
+            2
+        )
 
-    # Extract token usage
-    prompt_tokens = response.usage.input_tokens
-    completion_tokens = response.usage.output_tokens
-    total_tokens = response.usage.total_tokens
+        usage = getattr(
+            response,
+            "usage",
+            None
+        )
+
+        prompt_tokens = (
+            getattr(
+                usage,
+                "input_tokens",
+                None
+            )
+            if usage else None
+        )
+
+        completion_tokens = (
+            getattr(
+                usage,
+                "output_tokens",
+                None
+            )
+            if usage else None
+        )
+
+        total_tokens = (
+            getattr(
+                usage,
+                "total_tokens",
+                None
+            )
+            if usage else None
+        )
+
+        record_llm_call(
+            model,
+            prompt_tokens,
+            completion_tokens,
+            total_tokens,
+            latency_ms,
+            error=False
+        )
+
+        answer = response.output_text
+
+    except Exception as exc:
+
+        latency_ms = round(
+            (
+                time.perf_counter() - start
+            ) * 1000,
+            2
+        )
+
+        record_llm_call(
+            model,
+            latency_ms=latency_ms,
+            error=True
+        )
+
+        record_event(
+            "llm_call",
+            outcome="error",
+            details={
+                "model": model,
+                "error_type": type(exc).__name__
+            }
+        )
+
+        raise
 
     token_usage = {
+
         "prompt_tokens": prompt_tokens,
+
         "completion_tokens": completion_tokens,
+
         "total_tokens": total_tokens,
+
         "latency_ms": latency_ms
+
     }
 
     update_state(
@@ -207,6 +293,18 @@ Rules:
     append_memory(
         "Successful Resolutions",
         f"- {description}: {answer}"
+    )
+
+    record_event(
+        "llm_call",
+        outcome="success",
+        details={
+            "model": model,
+            "prompt_tokens": prompt_tokens,
+            "completion_tokens": completion_tokens,
+            "total_tokens": total_tokens,
+            "latency_ms": latency_ms
+        }
     )
 
     return {

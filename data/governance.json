@@ -1,0 +1,42 @@
+{
+  "framework": "Contoso IT Service Agent - Day 3 Governance",
+  "owner": "AI Architecture",
+  "controls": [
+    {
+      "id": "GOV-001",
+      "name": "Documented business purpose and scope",
+      "status": "Pass",
+      "owner": "Product Owner"
+    },
+    {
+      "id": "GOV-002",
+      "name": "Approved knowledge source only",
+      "status": "Pass",
+      "owner": "Knowledge Owner"
+    },
+    {
+      "id": "GOV-003",
+      "name": "Human approval for high-priority incidents",
+      "status": "Pass",
+      "owner": "IT Operations"
+    },
+    {
+      "id": "GOV-004",
+      "name": "No privileged action by the agent",
+      "status": "Pass",
+      "owner": "Security"
+    },
+    {
+      "id": "GOV-005",
+      "name": "Evaluation before release",
+      "status": "Pass",
+      "owner": "AI Architecture"
+    },
+    {
+      "id": "GOV-006",
+      "name": "Operational monitoring and audit",
+      "status": "Pass",
+      "owner": "Operations"
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "evaluation_version": "1.0",
+  "description": "Synthetic acceptance tests for the workshop IT service agent",
+  "cases": [
+    {
+      "id": "EV-001",
+      "description": "VPN connection fails",
+      "expected_category": "Network"
+    },
+    {
+      "id": "EV-002",
+      "description": "I need a password reset",
+      "expected_category": "Identity"
+    },
+    {
+      "id": "EV-003",
+      "description": "My WiFi connection is not working",
+      "expected_category": "Network"
+    }
+  ]
+}

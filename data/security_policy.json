@@ -1,0 +1,13 @@
+{
+  "policy_version": "1.0",
+  "minimum_confidence": 0.7,
+  "human_approval_required_for": [
+    "High"
+  ],
+  "blocked_phrases": [
+    "bypass security",
+    "disable audit logging",
+    "reveal passwords"
+  ],
+  "unknown_category_action": "ESCALATE"
+}

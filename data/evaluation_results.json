@@ -1,0 +1,32 @@
+{
+  "evaluation_version": "1.0",
+  "created_utc": "2026-11-05T05:28:57.613657+00:00",
+  "data_type": "synthetic_acceptance_tests",
+  "total_cases": 3,
+  "passed": 3,
+  "failed": 0,
+  "pass_rate": 1.0,
+  "results": [
+    {
+      "id": "EV-001",
+      "expected_category": "Network",
+      "actual_category": "Network",
+      "passed": true,
+      "error": null
+    },
+    {
+      "id": "EV-002",
+      "expected_category": "Identity",
+      "actual_category": "Identity",
+      "passed": true,
+      "error": null
+    },
+    {
+      "id": "EV-003",
+      "expected_category": "Network",
+      "actual_category": "Network",
+      "passed": true,
+      "error": null
+    }
+  ]
+}
